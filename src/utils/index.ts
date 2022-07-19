@@ -16,13 +16,16 @@ export const cleanObj = (obj: object) => {
   return _obj;
 };
 
-export const isFalsy = (value: any) => (value === 0 ? false : !value);
+export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
 // prettier-ignore
 // eslint-disable-next-line react-hooks/exhaustive-deps
 export const useMount = (callback: () => void) => useEffect(() => callback(), []);
 
-export const useDebounce = (value: any, delay?: number) => {
+export const useDebounce: <T>(arg0: T, arg1?: number) => T = (
+  value,
+  delay?: number
+) => {
   const [param, setParam] = useState(value);
 
   useEffect(() => {
