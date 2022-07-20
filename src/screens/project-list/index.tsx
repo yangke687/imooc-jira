@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import qs from "qs";
-import { cleanObj, useMount, useDebounce } from "../../utils";
+import { cleanObj, useMount, useDebounce, useArray } from "../../utils";
 import { SearchPanel } from "./search-panel";
 import { List } from "./list";
 
@@ -36,10 +36,31 @@ export const ProjectListScreen = () => {
     });
   });
 
+  const persons: { name: string; age: number }[] = [
+    { name: "jack", age: 25 },
+    { name: "ma", age: 22 },
+  ];
+
+  const { value, clear, removeIndex, add } = useArray(persons);
+
   return (
     <div>
       <SearchPanel param={param} setParam={setParam} users={users} />
       <List list={list} users={users} />
+
+      <h2>useArray Hook Test</h2>
+
+      <ul>
+        {value.map((item, idx) => (
+          <li key={idx}>
+            {item.name} {item.age}
+          </li>
+        ))}
+      </ul>
+
+      <button onClick={() => add({ name: "Ke", age: 12 })}>Add</button>
+      <button onClick={() => clear()}>Clear</button>
+      <button onClick={() => removeIndex(0)}>Remove 0</button>
     </div>
   );
 };

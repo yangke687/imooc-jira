@@ -35,3 +35,24 @@ export const useDebounce: <T>(arg0: T, arg1?: number) => T = (
 
   return param;
 };
+
+export const useArray = <T>(_arr: T[]) => {
+  const [arr, setArr] = useState(_arr);
+
+  const clear = () => setArr([]);
+
+  const removeIndex = (idx: number) => {
+    setArr(arr.filter((item, _idx) => _idx !== idx));
+  };
+
+  const add = (item: T) => {
+    setArr([...arr, item]);
+  };
+
+  return {
+    value: arr,
+    clear,
+    removeIndex,
+    add,
+  };
+};
