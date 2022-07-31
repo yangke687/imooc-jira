@@ -1,10 +1,12 @@
 import "./App.css";
-import { ProjectListScreen as ProjectList } from "./screens/project-list";
+// import { ProjectListScreen as ProjectList } from "./screens/project-list";
+import { LoginScreen } from "./screens/login";
 
 function App() {
   return (
     <div className="App">
-      <ProjectList />
+      {/* <ProjectList /> */}
+      <LoginScreen />
     </div>
   );
 }
