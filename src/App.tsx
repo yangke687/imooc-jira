@@ -1,14 +1,12 @@
+import { AuthApp } from "auth-app";
+import { useAuth } from "context/auth-context";
+import { UnAuthApp } from "unauth-app";
 import "./App.css";
 // import { ProjectListScreen as ProjectList } from "./screens/project-list";
-import { LoginScreen } from "./screens/login";
 
 function App() {
-  return (
-    <div className="App">
-      {/* <ProjectList /> */}
-      <LoginScreen />
-    </div>
-  );
+  const { user } = useAuth();
+  return <div className="App">{user ? <AuthApp /> : <UnAuthApp />}</div>;
 }
 
 export default App;
