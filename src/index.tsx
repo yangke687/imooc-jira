@@ -4,6 +4,8 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { loadDevTools } from "jira-dev-tool";
+// overwrite styles in jira-dev-tools
+import "antd/dist/antd.less";
 
 import { AppProviders } from "./context";
 
