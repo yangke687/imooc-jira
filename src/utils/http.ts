@@ -11,7 +11,7 @@ interface Config extends RequestInit {
 
 export const http = async (
   endpoint: string,
-  { data, token, headers, ...props }: Config
+  { data, token, headers, ...props }: Config = {}
 ) => {
   const config = {
     method: "GET",
@@ -50,6 +50,7 @@ export const http = async (
 
 export const useHttp = () => {
   const { user } = useAuth();
-  return (endpoint: string, config: Config = {}) =>
+  // utility Type: Parameters
+  return (...[endpoint, config]: Parameters<typeof http>) =>
     http(endpoint, { ...config, token: user?.token });
 };
