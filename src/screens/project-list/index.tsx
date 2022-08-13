@@ -26,19 +26,19 @@ export const ProjectListScreen = () => {
     client("users").then(setUsers);
   });
 
-  const persons: { name: string; age: number }[] = [
+  /*const persons: { name: string; age: number }[] = [
     { name: "jack", age: 25 },
     { name: "ma", age: 22 },
-  ];
+  ];*/
 
-  const { value, clear, removeIndex, add } = useArray(persons);
+  // const { value, clear, removeIndex, add } = useArray(persons);
 
   return (
     <div>
       <SearchPanel param={param} setParam={setParam} users={users} />
       <List list={list} users={users} />
 
-      <h2>useArray Hook Test</h2>
+      {/* <h2>useArray Hook Test</h2>
 
       <ul>
         {value.map((item, idx) => (
@@ -50,7 +50,7 @@ export const ProjectListScreen = () => {
 
       <button onClick={() => add({ name: "Ke", age: 12 })}>Add</button>
       <button onClick={() => clear()}>Clear</button>
-      <button onClick={() => removeIndex(0)}>Remove 0</button>
+      <button onClick={() => removeIndex(0)}>Remove 0</button>*/}
     </div>
   );
 };
