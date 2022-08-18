@@ -2,14 +2,15 @@ import { useAuth } from "context/auth-context";
 import React from "react";
 import styled from "@emotion/styled";
 import { ProjectListScreen } from "screens/project-list";
+import { Row } from "./components/lib";
 
 export const AuthApp = () => {
   const { logout } = useAuth();
 
   return (
     <Container>
-      <Header>
-        <HeaderLeft>
+      <Header between={true}>
+        <HeaderLeft gap={true}>
           <h3>Logo</h3>
           <h3>项目</h3>
           <h3>用户</h3>
@@ -34,18 +35,11 @@ const Container = styled.div`
   height: 100vh;
 `;
 
-const Header = styled.header`
+const Header = styled(Row)`
   grid-area: header;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
 `;
 
-const HeaderLeft = styled.div`
-  display: flex;
-  align-items: center;
-`;
+const HeaderLeft = styled(Row)``;
 
 const HeaderRight = styled.div``;
 
