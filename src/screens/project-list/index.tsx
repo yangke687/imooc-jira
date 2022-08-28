@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
-import { cleanObj, useMount, useDebounce, useArray } from "../../utils";
+import { useDebounce, useArray } from "../../utils";
 import { SearchPanel } from "./search-panel";
 import { List } from "./list";
-import { useHttp } from "../../utils/http";
+import { Typography } from "antd";
+import { useProjects } from "../../utils/use-projects";
+import { useUsers } from "../../utils/use-users";
 
 export const ProjectListScreen = () => {
-  const [users, setUsers] = useState([]);
-
-  const [list, setList] = useState([]);
-
   const [param, setParam] = useState({
     name: "",
     personId: "",
@@ -17,15 +15,9 @@ export const ProjectListScreen = () => {
 
   const debouncedParam = useDebounce(param, 500);
 
-  const client = useHttp();
+  const { isLoading, error, data: list } = useProjects(debouncedParam);
 
-  useEffect(() => {
-    client("projects", { data: cleanObj(debouncedParam) }).then(setList);
-  }, [debouncedParam]);
-
-  useMount(() => {
-    client("users").then(setUsers);
-  });
+  const { data: users } = useUsers();
 
   /*const persons: { name: string; age: number }[] = [
     { name: "jack", age: 25 },
@@ -37,8 +29,11 @@ export const ProjectListScreen = () => {
   return (
     <Container>
       <h1>项目列表</h1>
-      <SearchPanel param={param} setParam={setParam} users={users} />
-      <List list={list} users={users} />
+      {error ? (
+        <Typography.Text type={"danger"}>{error.message}</Typography.Text>
+      ) : null}
+      <SearchPanel param={param} setParam={setParam} users={users || []} />
+      <List loading={isLoading} dataSource={list || []} users={users || []} />
 
       {/* <h2>useArray Hook Test</h2>
 
