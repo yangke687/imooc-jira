@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { loadDevTools } from "jira-dev-tool";
+import { loadServer, DevTools } from "jira-dev-tool";
 // overwrite styles in jira-dev-tools
 import "antd/dist/antd.less";
 
@@ -18,10 +18,11 @@ const root = ReactDOM.createRoot(
 //   </React.StrictMode>
 // );
 
-loadDevTools(() => {
+loadServer(() => {
   root.render(
     <React.StrictMode>
       <AppProviders>
+        <DevTools />
         <App />
       </AppProviders>
     </React.StrictMode>
