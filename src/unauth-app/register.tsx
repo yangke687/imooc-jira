@@ -3,11 +3,15 @@ import { useAuth } from "../context/auth-context";
 import { Form, Input } from "antd";
 import { LongButton } from "./index";
 
-export const RegisterScreen = () => {
+export const RegisterScreen = ({
+  onError,
+}: {
+  onError: (err: Error) => void;
+}) => {
   const { register } = useAuth();
 
-  const handleSubmit = (values: { username: string; password: string }) =>
-    register(values);
+  // prettier-ignore
+  const handleSubmit = (values: { username: string; password: string }) => register(values).catch(onError)
 
   return (
     <Form onFinish={handleSubmit}>

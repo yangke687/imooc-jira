@@ -3,11 +3,11 @@ import { Form, Input } from "antd";
 import { useAuth } from "../context/auth-context";
 import { LongButton } from "./index";
 
-export const LoginScreen = () => {
+export const LoginScreen = ({ onError }: { onError: (err: Error) => void }) => {
   const { login } = useAuth();
 
-  const handleSubmit = (values: { username: string; password: string }) =>
-    login(values);
+  // prettier-ignore
+  const handleSubmit = (values: { username: string; password: string }) => login(values).catch(onError)
 
   return (
     <Form onFinish={handleSubmit}>
