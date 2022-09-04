@@ -10,8 +10,21 @@ export const RegisterScreen = ({
 }) => {
   const { register } = useAuth();
 
-  // prettier-ignore
-  const handleSubmit = (values: { username: string; password: string }) => register(values).catch(onError)
+  const handleSubmit = ({
+    cpassword,
+    ...values
+  }: {
+    username: string;
+    password: string;
+    cpassword: string;
+  }) => {
+    if (cpassword !== values.password) {
+      onError(new Error("两次输入的密码不一致"));
+      return;
+    }
+
+    register(values).catch(onError);
+  };
 
   return (
     <Form onFinish={handleSubmit}>
@@ -27,6 +40,13 @@ export const RegisterScreen = ({
         rules={[{ required: true, message: "请输入密码" }]}
       >
         <Input placeholder="密码" />
+      </Form.Item>
+
+      <Form.Item
+        name="cpassword"
+        rules={[{ required: true, message: "请确认密码" }]}
+      >
+        <Input placeholder="确认密码" />
       </Form.Item>
 
       <LongButton type="primary" htmlType="submit">
