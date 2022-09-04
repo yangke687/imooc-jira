@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "../context/auth-context";
 import { Form, Input } from "antd";
 import { LongButton } from "./index";
+import { useAsync } from "../utils/use-async";
 
 export const RegisterScreen = ({
   onError,
@@ -9,8 +10,9 @@ export const RegisterScreen = ({
   onError: (err: Error) => void;
 }) => {
   const { register } = useAuth();
+  const { run, isLoading } = useAsync(undefined, { throwError: true });
 
-  const handleSubmit = ({
+  const handleSubmit = async ({
     cpassword,
     ...values
   }: {
@@ -23,7 +25,11 @@ export const RegisterScreen = ({
       return;
     }
 
-    register(values).catch(onError);
+    try {
+      await run(register(values));
+    } catch (e) {
+      onError(e as Error);
+    }
   };
 
   return (
@@ -49,7 +55,7 @@ export const RegisterScreen = ({
         <Input placeholder="确认密码" />
       </Form.Item>
 
-      <LongButton type="primary" htmlType="submit">
+      <LongButton loading={isLoading} type="primary" htmlType="submit">
         注册
       </LongButton>
     </Form>
