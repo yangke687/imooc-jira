@@ -7,10 +7,13 @@ import left from "assets/left.svg";
 import right from "assets/right.svg";
 import { LoginScreen } from "./login";
 import { RegisterScreen } from "./register";
+import { useDocumentTitle } from "../utils";
 
 export const UnAuthApp = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  useDocumentTitle("登录或注册以继续", false);
 
   return (
     <Container>

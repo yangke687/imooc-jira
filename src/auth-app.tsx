@@ -5,9 +5,12 @@ import { Dropdown, Menu } from "antd";
 import { ProjectListScreen } from "screens/project-list";
 import { Row } from "./components/lib";
 import { ReactComponent as Logo } from "assets/software-logo.svg";
+import { useDocumentTitle } from "./utils";
 
 export const AuthApp = () => {
   const { logout, user } = useAuth();
+
+  useDocumentTitle("项目列表", false);
 
   return (
     <Container>
