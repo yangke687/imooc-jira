@@ -13,7 +13,7 @@ export const UnAuthApp = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  useDocumentTitle("登录或注册以继续", false);
+  useDocumentTitle("登录或注册以继续");
 
   return (
     <Container>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export const cleanObj = (obj: { [key: string]: unknown }) => {
   const _obj = { ...obj };
@@ -59,7 +59,9 @@ export const useArray = <T>(_arr: T[]) => {
 };
 
 export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
-  const oldTitle = document.title;
+  const oldTitle = useRef(document.title).current;
+
+  // console.log("rendering:", oldTitle);
 
   useEffect(() => {
     document.title = title;
@@ -68,8 +70,9 @@ export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
   useEffect(() => {
     return () => {
       if (!keepOnUnmount) {
+        // console.log("unmount:", oldTitle);
         document.title = oldTitle;
       }
     };
-  }, []);
+  }, [keepOnUnmount, oldTitle]);
 };
