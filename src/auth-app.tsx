@@ -1,43 +1,60 @@
 import { useAuth } from "context/auth-context";
 import React from "react";
+import { Navigate, Route, Routes } from "react-router";
+import { BrowserRouter } from "react-router-dom";
 import styled from "@emotion/styled";
 import { Dropdown, Menu } from "antd";
 import { ProjectListScreen } from "screens/project-list";
 import { Row } from "./components/lib";
 import { ReactComponent as Logo } from "assets/software-logo.svg";
 import { useDocumentTitle } from "./utils";
+import { ProjectScreen } from "./screens/project";
 
 export const AuthApp = () => {
-  const { logout, user } = useAuth();
-
   useDocumentTitle("项目列表", false);
 
   return (
     <Container>
-      <Header between={true}>
-        <HeaderLeft gap={true}>
-          <Logo width="18rem" color="rgb(38, 132, 255)" />
-          <h3>项目</h3>
-          <h3>用户</h3>
-        </HeaderLeft>
-        <HeaderRight>
-          <Dropdown
-            overlay={
-              <Menu>
-                <Menu.Item key="logout">
-                  <a onClick={(e) => logout()}>登出</a>
-                </Menu.Item>
-              </Menu>
-            }
-          >
-            <a onClick={(e) => e.preventDefault()}>Hi, {user?.name}</a>
-          </Dropdown>
-        </HeaderRight>
-      </Header>
+      <PageHeader />
       <Main>
-        <ProjectListScreen />
+        <BrowserRouter>
+          <Routes>
+            <Route path={"/projects"} element={<ProjectListScreen />} />
+            <Route
+              path={"/projects/:projectId/*"}
+              element={<ProjectScreen />}
+            />
+          </Routes>
+        </BrowserRouter>
       </Main>
     </Container>
+  );
+};
+
+const PageHeader = () => {
+  const { logout, user } = useAuth();
+
+  return (
+    <Header between={true}>
+      <HeaderLeft gap={true}>
+        <Logo width="18rem" color="rgb(38, 132, 255)" />
+        <h3>项目</h3>
+        <h3>用户</h3>
+      </HeaderLeft>
+      <HeaderRight>
+        <Dropdown
+          overlay={
+            <Menu>
+              <Menu.Item key="logout">
+                <a onClick={(e) => logout()}>登出</a>
+              </Menu.Item>
+            </Menu>
+          }
+        >
+          <a onClick={(e) => e.preventDefault()}>Hi, {user?.name}</a>
+        </Dropdown>
+      </HeaderRight>
+    </Header>
   );
 };
 
