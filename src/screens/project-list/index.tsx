@@ -6,13 +6,15 @@ import { List } from "./list";
 import { Typography } from "antd";
 import { useProjects } from "../../utils/use-projects";
 import { useUsers } from "../../utils/use-users";
+import { useUrlQueryParam } from "../../utils/url";
 
 export const ProjectListScreen = () => {
-  const [param, setParam] = useState({
-    name: "",
-    personId: "",
-  });
+  // const [, setParam] = useState({
+  //   name: "",
+  //   personId: "",
+  // });
 
+  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
   const debouncedParam = useDebounce(param, 500);
 
   const { isLoading, error, data: list } = useProjects(debouncedParam);
