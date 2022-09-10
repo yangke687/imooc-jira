@@ -3,11 +3,11 @@ import React from "react";
 import { Navigate, Route, Routes } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 import styled from "@emotion/styled";
-import { Dropdown, Menu } from "antd";
+import { Button, Dropdown, Menu } from "antd";
 import { ProjectListScreen } from "screens/project-list";
 import { Row } from "./components/lib";
 import { ReactComponent as Logo } from "assets/software-logo.svg";
-import { useDocumentTitle } from "./utils";
+import { resetRoute, useDocumentTitle } from "./utils";
 import { ProjectScreen } from "./screens/project";
 
 export const AuthApp = () => {
@@ -24,6 +24,7 @@ export const AuthApp = () => {
               path={"/projects/:projectId/*"}
               element={<ProjectScreen />}
             />
+            <Route path={"*"} element={<Navigate to={"/projects"} />} />
           </Routes>
         </BrowserRouter>
       </Main>
@@ -37,7 +38,9 @@ const PageHeader = () => {
   return (
     <Header between={true}>
       <HeaderLeft gap={true}>
-        <Logo width="18rem" color="rgb(38, 132, 255)" />
+        <Button type={"link"} onClick={resetRoute}>
+          <Logo width="18rem" color="rgb(38, 132, 255)" />
+        </Button>
         <h3>项目</h3>
         <h3>用户</h3>
       </HeaderLeft>
