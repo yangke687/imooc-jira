@@ -17,16 +17,16 @@ export const IdSelect = (props: IdSelectProps) => {
 
   return (
     <Select
-      {...otherProps}
-      value={toNum(value)}
+      value={options && options.length > 0 ? toNum(value) : 0}
       onChange={(value) => onChange(toNum(value) || undefined)}
+      {...otherProps}
     >
       {defaultOptionName ? (
         <Select.Option value={0}>{defaultOptionName}</Select.Option>
       ) : null}
       {options?.map((option) => (
         <Select.Option key={option.id} value={option.id}>
-          {option.id}
+          {option.name}
         </Select.Option>
       ))}
     </Select>

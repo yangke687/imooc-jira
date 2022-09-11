@@ -5,28 +5,17 @@ import { SearchPanel } from "./search-panel";
 import { List } from "./list";
 import { Typography } from "antd";
 import { useProjects } from "../../utils/use-projects";
+import { useProjectSearchParams } from "./util";
 import { useUsers } from "../../utils/use-users";
-import { useUrlQueryParam } from "../../utils/url";
 
 export const ProjectListScreen = () => {
-  // const [, setParam] = useState({
-  //   name: "",
-  //   personId: "",
-  // });
+  const [param, setParam] = useProjectSearchParams();
 
-  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
-  const debouncedParam = useDebounce(param, 500);
-
-  const { isLoading, error, data: list } = useProjects(debouncedParam);
-
-  const { data: users } = useUsers();
-
-  /*const persons: { name: string; age: number }[] = [
-    { name: "jack", age: 25 },
-    { name: "ma", age: 22 },
-  ];*/
+  const { isLoading, error, data: list } = useProjects(useDebounce(param, 500));
 
   // const { value, clear, removeIndex, add } = useArray(persons);
+
+  const { data: users } = useUsers();
 
   return (
     <Container>
@@ -34,7 +23,7 @@ export const ProjectListScreen = () => {
       {error ? (
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
       ) : null}
-      <SearchPanel param={param} setParam={setParam} users={users || []} />
+      <SearchPanel param={param} setParam={setParam} />
       <List loading={isLoading} dataSource={list || []} users={users || []} />
 
       {/* <h2>useArray Hook Test</h2>
