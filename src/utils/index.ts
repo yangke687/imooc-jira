@@ -16,8 +16,8 @@ export const cleanObj = (obj: { [key: string]: unknown }) => {
 
 export const isFalsy = (value: unknown) => (value === 0 ? false : !value);
 
-export const isVoid = (value: unknown) =>
-  value === undefined || value === null || value === "";
+// prettier-ignore
+export const isVoid = (value: unknown) => value === undefined || value === null || value === "";
 
 // prettier-ignore
 // eslint-disable-next-line react-hooks/exhaustive-deps
