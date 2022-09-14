@@ -9,8 +9,10 @@ export const useProjects = (params: Partial<Project>) => {
 
   const { run, ...result } = useAsync<Project[]>();
 
+  const fetchProjects = () => client("projects", { data: cleanObj(params) });
+
   useEffect(() => {
-    run(client("projects", { data: cleanObj(params) }));
+    run(fetchProjects(), { retry: fetchProjects });
   }, [params]);
 
   return result;

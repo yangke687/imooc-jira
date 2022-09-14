@@ -11,7 +11,12 @@ import { useUsers } from "../../utils/use-users";
 export const ProjectListScreen = () => {
   const [param, setParam] = useProjectSearchParams();
 
-  const { isLoading, error, data: list } = useProjects(useDebounce(param, 500));
+  const {
+    isLoading,
+    error,
+    data: list,
+    retry,
+  } = useProjects(useDebounce(param, 500));
 
   // const { value, clear, removeIndex, add } = useArray(persons);
 
@@ -24,7 +29,12 @@ export const ProjectListScreen = () => {
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
       ) : null}
       <SearchPanel param={param} setParam={setParam} />
-      <List loading={isLoading} dataSource={list || []} users={users || []} />
+      <List
+        loading={isLoading}
+        dataSource={list || []}
+        users={users || []}
+        refresh={retry}
+      />
 
       {/* <h2>useArray Hook Test</h2>
 

@@ -27,6 +27,8 @@ export const useAsync = <D>(
 
   const config = { ...defaultConfig, ...initConfig };
 
+  const [retry, setRetry] = useState(() => () => {});
+
   const setData = (data: D) =>
     setState({
       data,
@@ -41,12 +43,21 @@ export const useAsync = <D>(
       stat: "error",
     });
 
-  const run = (promise: Promise<D>) => {
+  const run = (
+    promise: Promise<D>,
+    runConfig?: { retry: () => Promise<D> }
+  ) => {
     if (!promise || !promise.then) {
       throw new Error("请传入Promise类型参数");
     }
 
     setState({ ...state, stat: "loading" });
+
+    setRetry(() => () => {
+      if (runConfig?.retry()) {
+        run(runConfig.retry(), { retry: runConfig.retry });
+      }
+    });
 
     return promise
       .then((data) => {
@@ -71,6 +82,7 @@ export const useAsync = <D>(
     run,
     setData,
     setError,
+    retry,
     ...state,
   };
 };
