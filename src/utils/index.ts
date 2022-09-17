@@ -80,3 +80,21 @@ export const useDocumentTitle = (title: string, keepOnUnmount = true) => {
 export const resetRoute = () => {
   window.location.href = window.location.origin;
 };
+
+/**
+ * return mounted status of component,
+ * return true -> mounted
+ * return false -> unmount
+ */
+export const useMountedRef = () => {
+  const mountedRef = useRef(false);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+
+  return mountedRef;
+};

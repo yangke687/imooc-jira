@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useMountedRef } from "./index";
 
 interface State<D> {
   error: Error | null;
@@ -26,6 +27,8 @@ export const useAsync = <D>(
   });
 
   const config = { ...defaultConfig, ...initConfig };
+
+  const mountedRef = useMountedRef();
 
   const [retry, setRetry] = useState(() => () => {});
 
@@ -61,7 +64,14 @@ export const useAsync = <D>(
 
     return promise
       .then((data) => {
-        setData(data);
+        // setData only when component has been mounted
+        if (mountedRef.current) {
+          console.log(
+            "[useAsync]: setData only when component has been mounted"
+          );
+          setData(data);
+        }
+
         return data;
       })
       .catch((err) => {
