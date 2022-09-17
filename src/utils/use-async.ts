@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useMountedRef } from "./index";
 
 interface State<D> {
@@ -32,57 +32,63 @@ export const useAsync = <D>(
 
   const [retry, setRetry] = useState(() => () => {});
 
-  const setData = (data: D) =>
-    setState({
-      data,
-      error: null,
-      stat: "success",
-    });
+  const setData = useCallback(
+    (data: D) =>
+      setState({
+        data,
+        error: null,
+        stat: "success",
+      }),
+    []
+  );
 
-  const setError = (error: Error) =>
-    setState({
-      error,
-      data: null,
-      stat: "error",
-    });
+  const setError = useCallback(
+    (error: Error) =>
+      setState({
+        error,
+        data: null,
+        stat: "error",
+      }),
+    []
+  );
 
-  const run = (
-    promise: Promise<D>,
-    runConfig?: { retry: () => Promise<D> }
-  ) => {
-    if (!promise || !promise.then) {
-      throw new Error("请传入Promise类型参数");
-    }
-
-    setState({ ...state, stat: "loading" });
-
-    setRetry(() => () => {
-      if (runConfig?.retry()) {
-        run(runConfig.retry(), { retry: runConfig.retry });
+  const run = useCallback(
+    (promise: Promise<D>, runConfig?: { retry: () => Promise<D> }) => {
+      if (!promise || !promise.then) {
+        throw new Error("请传入Promise类型参数");
       }
-    });
 
-    return promise
-      .then((data) => {
-        // setData only when component has been mounted
-        if (mountedRef.current) {
-          console.log(
-            "[useAsync]: setData only when component has been mounted"
-          );
-          setData(data);
-        }
+      setState((prevState) => ({ ...prevState, stat: "loading" }));
 
-        return data;
-      })
-      .catch((err) => {
-        setError(err);
-        if (config.throwError) {
-          return Promise.reject(err);
+      setRetry(() => () => {
+        if (runConfig?.retry()) {
+          run(runConfig.retry(), { retry: runConfig.retry });
         }
-        return err;
-      })
-      .finally(() => {});
-  };
+      });
+
+      return promise
+        .then((data) => {
+          // setData only when component has been mounted
+          if (mountedRef.current) {
+            console.log(
+              "[useAsync]: setData only when component has been mounted"
+            );
+            setData(data);
+          }
+
+          return data;
+        })
+        .catch((err) => {
+          setError(err);
+          if (config.throwError) {
+            return Promise.reject(err);
+          }
+          return err;
+        })
+        .finally(() => {});
+    },
+    [config.throwError, mountedRef, setData, setError]
+  );
 
   return {
     isIdle: state.stat === "idle",
