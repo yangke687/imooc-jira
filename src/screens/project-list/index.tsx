@@ -3,12 +3,15 @@ import styled from "@emotion/styled";
 import { useDebounce, useArray } from "../../utils";
 import { SearchPanel } from "./search-panel";
 import { List } from "./list";
-import { Typography } from "antd";
+import { Button, Typography } from "antd";
 import { useProjects } from "../../utils/use-projects";
 import { useProjectSearchParams } from "./util";
 import { useUsers } from "../../utils/use-users";
+import { Row } from "../../components/lib";
 
-export const ProjectListScreen = () => {
+export const ProjectListScreen = (props: {
+  setProjectModalOpen: (isOpen: boolean) => void;
+}) => {
   const [param, setParam] = useProjectSearchParams();
 
   const {
@@ -24,7 +27,12 @@ export const ProjectListScreen = () => {
 
   return (
     <Container>
-      <h1>项目列表</h1>
+      <Row between={true}>
+        <h1>项目列表</h1>
+        <Button onClick={() => props.setProjectModalOpen(true)}>
+          创建项目
+        </Button>
+      </Row>
       {error ? (
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
       ) : null}
@@ -34,6 +42,7 @@ export const ProjectListScreen = () => {
         dataSource={list || []}
         users={users || []}
         refresh={retry}
+        setProjectModalOpen={props.setProjectModalOpen}
       />
 
       {/* <h2>useArray Hook Test</h2>
