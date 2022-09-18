@@ -9,9 +9,7 @@ import { useProjectSearchParams } from "./util";
 import { useUsers } from "../../utils/use-users";
 import { Row } from "../../components/lib";
 
-export const ProjectListScreen = (props: {
-  setProjectModalOpen: (isOpen: boolean) => void;
-}) => {
+export const ProjectListScreen = (props: { projectButton: JSX.Element }) => {
   const [param, setParam] = useProjectSearchParams();
 
   const {
@@ -29,9 +27,7 @@ export const ProjectListScreen = (props: {
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        <Button onClick={() => props.setProjectModalOpen(true)}>
-          创建项目
-        </Button>
+        {props.projectButton}
       </Row>
       {error ? (
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
@@ -42,7 +38,7 @@ export const ProjectListScreen = (props: {
         dataSource={list || []}
         users={users || []}
         refresh={retry}
-        setProjectModalOpen={props.setProjectModalOpen}
+        {...props}
       />
 
       {/* <h2>useArray Hook Test</h2>
