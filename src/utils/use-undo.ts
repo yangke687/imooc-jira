@@ -11,6 +11,10 @@ export const useUndo = <T>(initValue: T) => {
     future: [],
   });
 
+  const canUndo = state.history.length > 0;
+
+  const canRedo = state.future.length > 0;
+
   const undo = useCallback(() => {
     setState((currentState) => {
       const { history, current, future } = currentState;
@@ -77,5 +81,8 @@ export const useUndo = <T>(initValue: T) => {
     });
   }, []);
 
-  return [state, { undo, redo, set, reset }];
+  return [
+    { ...state, canUndo, canRedo },
+    { undo, redo, set, reset },
+  ] as const;
 };

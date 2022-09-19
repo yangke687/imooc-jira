@@ -11,6 +11,7 @@ import { resetRoute, useDocumentTitle } from "./utils";
 import { ProjectScreen } from "./screens/project";
 import { ProjectModal } from "./screens/project-list/project-modal";
 import { ProjectPopover } from "./components/project-popover";
+import { Counter } from "./screens/counter-sample";
 
 export const AuthApp = () => {
   useDocumentTitle("项目列表", false);
@@ -30,6 +31,7 @@ export const AuthApp = () => {
         }
       />
       <Main>
+        <Counter />
         <BrowserRouter>
           <Routes>
             <Route
