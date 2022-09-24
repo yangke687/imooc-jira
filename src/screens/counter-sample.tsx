@@ -1,9 +1,10 @@
 import React from "react";
 import { Button, Row } from "antd";
-import { useUndo } from "../utils/use-undo";
+// import { useUndo } from "../utils/use-undo";
+import { useUndo } from "../utils/use-undo-reducer";
 
 export const Counter = () => {
-  const [state, { redo, undo, set }] = useUndo(2);
+  const [state, { redo, undo, set, canUndo, canRedo }] = useUndo(0);
 
   return (
     <>
@@ -13,10 +14,10 @@ export const Counter = () => {
       <Row>
         <Button onClick={() => set(state.current + 1)}>Increase</Button>
         <Button onClick={() => set(state.current - 1)}>Decrease</Button>
-        <Button onClick={undo} disabled={!state.canUndo}>
+        <Button onClick={undo} disabled={!canUndo}>
           Undo
         </Button>
-        <Button onClick={redo} disabled={!state.canRedo}>
+        <Button onClick={redo} disabled={!canRedo}>
           Redo
         </Button>
       </Row>
