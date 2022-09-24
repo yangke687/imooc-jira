@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useReducer, useState } from "react";
 import { useMountedRef } from "./index";
 
 interface State<D> {
@@ -17,39 +17,56 @@ const defaultConfig = {
   throwError: false,
 };
 
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+  const mountedRef = useMountedRef();
+
+  return useCallback(
+    (...args: T[]) => (mountedRef.current ? dispatch(...args) : void 0),
+    [dispatch, mountedRef]
+  );
+};
+
 export const useAsync = <D>(
   initState?: State<D>,
   initConfig?: typeof defaultConfig
 ) => {
-  const [state, setState] = useState<State<D>>({
-    ...defaultInitState,
-    ...initState,
-  });
+  // const [state, setState] = useState<State<D>>({
+  //   ...defaultInitState,
+  //   ...initState,
+  // });
+
+  const [state, dispatch] = useReducer(
+    (state: State<D>, action: Partial<State<D>>) => ({ ...state, ...action }),
+    {
+      ...defaultInitState,
+      ...initState,
+    }
+  );
 
   const config = { ...defaultConfig, ...initConfig };
 
-  const mountedRef = useMountedRef();
+  const safeDispatch = useSafeDispatch(dispatch);
 
   const [retry, setRetry] = useState(() => () => {});
 
   const setData = useCallback(
     (data: D) =>
-      setState({
+      safeDispatch({
         data,
         error: null,
         stat: "success",
       }),
-    []
+    [safeDispatch]
   );
 
   const setError = useCallback(
     (error: Error) =>
-      setState({
+      safeDispatch({
         error,
         data: null,
         stat: "error",
       }),
-    []
+    [safeDispatch]
   );
 
   const run = useCallback(
@@ -58,7 +75,7 @@ export const useAsync = <D>(
         throw new Error("请传入Promise类型参数");
       }
 
-      setState((prevState) => ({ ...prevState, stat: "loading" }));
+      safeDispatch({ stat: "loading" });
 
       setRetry(() => () => {
         if (runConfig?.retry()) {
@@ -68,14 +85,7 @@ export const useAsync = <D>(
 
       return promise
         .then((data) => {
-          // setData only when component has been mounted
-          if (mountedRef.current) {
-            console.log(
-              "[useAsync]: setData only when component has been mounted"
-            );
-            setData(data);
-          }
-
+          setData(data);
           return data;
         })
         .catch((err) => {
@@ -87,7 +97,7 @@ export const useAsync = <D>(
         })
         .finally(() => {});
     },
-    [config.throwError, mountedRef, setData, setError]
+    [config.throwError, setData, setError, safeDispatch]
   );
 
   return {
