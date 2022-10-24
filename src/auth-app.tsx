@@ -15,7 +15,7 @@ import { ProjectModal } from "./screens/project-list/project-modal";
 import { ProjectPopover } from "./components/project-popover";
 // import { Counter } from "./screens/counter-sample"; // undo, redo, test samples
 
-import { projectListActions } from "./store/projectListSlice";
+import { projectListActions } from "./store/project.list.slice";
 
 export const AuthApp = () => {
   useDocumentTitle("项目列表", false);

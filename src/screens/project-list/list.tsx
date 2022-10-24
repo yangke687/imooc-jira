@@ -8,7 +8,7 @@ import { useEditProject } from "../../utils/use-projects";
 import { ButtonNoPadding } from "../../components/lib";
 import { useDispatch } from "react-redux";
 
-import { projectListActions } from "../../store/projectListSlice";
+import { projectListActions } from "../../store/project.list.slice";
 
 export interface Project {
   id: number;

@@ -2,8 +2,8 @@ import React from "react";
 import { Button, Drawer } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 
-import { selectedProjectModalOpen } from "../../store/projectListSlice";
-import { projectListActions } from "../../store/projectListSlice";
+import { selectedProjectModalOpen } from "../../store/project.list.slice";
+import { projectListActions } from "../../store/project.list.slice";
 
 export const ProjectModal = () => {
   const projectModalOpen = useSelector(selectedProjectModalOpen);

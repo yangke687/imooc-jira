@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 
 import { useProjects } from "../utils/use-projects";
 import { ButtonNoPadding } from "./lib";
-import { projectListActions } from "../store/projectListSlice";
+import { projectListActions } from "../store/project.list.slice";
 
 export const ProjectPopover = () => {
   const { data: projects, isLoading } = useProjects();
