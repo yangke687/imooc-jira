@@ -1,23 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import { useDebounce, useArray } from "../../utils";
 import { SearchPanel } from "./search-panel";
 import { List } from "./list";
-import { Button, Typography } from "antd";
 import { useProjects } from "../../utils/use-projects";
 import { useProjectModal, useProjectSearchParams } from "./util";
 import { useUsers } from "../../utils/use-users";
-import { ButtonNoPadding, Row } from "../../components/lib";
+import { ButtonNoPadding, ErrorBox, Row } from "../../components/lib";
 
 export const ProjectListScreen = () => {
   const [param, setParam] = useProjectSearchParams();
 
-  const {
-    isLoading,
-    error,
-    data: list,
-    retry,
-  } = useProjects(useDebounce(param, 500));
+  const { isLoading, error, data: list } = useProjects(useDebounce(param, 500));
 
   // const { value, clear, removeIndex, add } = useArray(persons);
 
@@ -33,16 +27,9 @@ export const ProjectListScreen = () => {
           创建项目
         </ButtonNoPadding>
       </Row>
-      {error ? (
-        <Typography.Text type={"danger"}>{error.message}</Typography.Text>
-      ) : null}
+      <ErrorBox error={error} />
       <SearchPanel param={param} setParam={setParam} />
-      <List
-        loading={isLoading}
-        dataSource={list || []}
-        users={users || []}
-        refresh={retry}
-      />
+      <List loading={isLoading} dataSource={list || []} users={users || []} />
 
       {/* <h2>useArray Hook Test</h2>
 
