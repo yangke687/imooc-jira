@@ -5,11 +5,11 @@ import { SearchPanel } from "./search-panel";
 import { List } from "./list";
 import { Button, Typography } from "antd";
 import { useProjects } from "../../utils/use-projects";
-import { useProjectSearchParams } from "./util";
+import { useProjectModal, useProjectSearchParams } from "./util";
 import { useUsers } from "../../utils/use-users";
-import { Row } from "../../components/lib";
+import { ButtonNoPadding, Row } from "../../components/lib";
 
-export const ProjectListScreen = (props: { projectButton: JSX.Element }) => {
+export const ProjectListScreen = () => {
   const [param, setParam] = useProjectSearchParams();
 
   const {
@@ -23,11 +23,15 @@ export const ProjectListScreen = (props: { projectButton: JSX.Element }) => {
 
   const { data: users } = useUsers();
 
+  const { open } = useProjectModal();
+
   return (
     <Container>
       <Row between={true}>
         <h1>项目列表</h1>
-        {props.projectButton}
+        <ButtonNoPadding onClick={open} type={"link"}>
+          创建项目
+        </ButtonNoPadding>
       </Row>
       {error ? (
         <Typography.Text type={"danger"}>{error.message}</Typography.Text>
@@ -38,7 +42,6 @@ export const ProjectListScreen = (props: { projectButton: JSX.Element }) => {
         dataSource={list || []}
         users={users || []}
         refresh={retry}
-        {...props}
       />
 
       {/* <h2>useArray Hook Test</h2>
