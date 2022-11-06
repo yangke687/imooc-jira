@@ -34,8 +34,11 @@ export const useProjectModal = () => {
   const open = () => setProjectCreate({ projectCreate: true });
 
   const close = () => {
-    setProjectCreate({ projectCreate: null });
-    setEditingProjectId({ editingProjectId: null });
+    if (editingProject) {
+      setEditingProjectId({ editingProjectId: null });
+    } else {
+      setProjectCreate({ projectCreate: null });
+    }
   };
 
   return {
