@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate } from "react-router";
+import { Routes, Route } from "react-router";
 import { Link } from "react-router-dom";
 
 import { BoardScreen } from "../board";

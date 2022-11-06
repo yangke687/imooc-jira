@@ -1,6 +1,5 @@
 import { useHttp } from "./http";
 import { Project } from "../screens/project-list/list";
-import { useAsync } from "./use-async";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export const useProjects = (params?: Partial<Project>) => {
@@ -39,6 +38,18 @@ export const useAddProject = () => {
       }),
     {
       onSuccess: () => queryClient.invalidateQueries("projects"),
+    }
+  );
+};
+
+export const useProject = (id?: number) => {
+  const client = useHttp();
+
+  return useQuery<Project>(
+    ["project", { id }],
+    () => client(`projects/${id}`),
+    {
+      enabled: !!id,
     }
   );
 };

@@ -1,5 +1,6 @@
 import { useUrlQueryParam } from "../../utils/url";
 import { useMemo } from "react";
+import { useProject } from "../../utils/use-projects";
 
 export const useProjectSearchParams = () => {
   const [param, setParam] = useUrlQueryParam(["name", "personId"]);
@@ -20,13 +21,29 @@ export const useProjectModal = () => {
     "projectCreate",
   ]);
 
+  const [{ editingProjectId }, setEditingProjectId] = useUrlQueryParam([
+    "editingProjectId",
+  ]);
+
+  // prettier-ignore
+  const {data: editingProject, isLoading} = useProject(Number(editingProjectId));
+
+  // prettier-ignore
+  const startEdit = (id: number) => setEditingProjectId({editingProjectId: id});
+
   const open = () => setProjectCreate({ projectCreate: true });
 
-  const close = () => setProjectCreate({ projectCreate: null });
+  const close = () => {
+    setProjectCreate({ projectCreate: null });
+    setEditingProjectId({ editingProjectId: null });
+  };
 
   return {
-    projectModalOpen: projectCreate === "true",
+    projectModalOpen: projectCreate === "true" || Boolean(editingProjectId),
+    editingProject,
+    isLoading,
     open,
     close,
+    startEdit,
   };
 };
