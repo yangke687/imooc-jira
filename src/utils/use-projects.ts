@@ -1,8 +1,11 @@
 import { useHttp } from "./http";
 import { Project } from "../screens/project-list/list";
 import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
-import { useProjectSearchParams } from "../screens/project-list/util";
-import { useAddConfig, useEditConfig } from "./use-optimistic-config";
+import {
+  useAddConfig,
+  useEditConfig,
+  useDeleteConfig,
+} from "./use-optimistic-config";
 
 export const useProjects = (params?: Partial<Project>) => {
   const client = useHttp();
@@ -35,6 +38,18 @@ export const useAddProject = (queryKey: QueryKey) => {
         data: params,
       }),
     useAddConfig(queryKey)
+  );
+};
+
+export const useDeleteProject = (queryKey: QueryKey) => {
+  const client = useHttp();
+
+  return useMutation(
+    ({ id }: { id: number }) =>
+      client(`projects/${id}`, {
+        method: "DELETE",
+      }),
+    useDeleteConfig(queryKey)
   );
 };
 
