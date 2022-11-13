@@ -7,7 +7,11 @@ import { User } from "./search-panel";
 import { Pin } from "../../components/Pin";
 import { useEditProject } from "../../utils/use-projects";
 import { ButtonNoPadding } from "../../components/lib";
-import { useProjectModal } from "./util";
+import {
+  useProjectModal,
+  useProjectSearchParams,
+  useProjectsQueryKey,
+} from "./util";
 
 export interface Project {
   id: number;
@@ -23,7 +27,9 @@ interface ListProps extends TableProps<Project> {
 }
 
 export const List = ({ users, ...props }: ListProps) => {
-  const { mutate } = useEditProject();
+  const queryKey = useProjectsQueryKey();
+
+  const { mutate } = useEditProject(queryKey);
 
   const { startEdit } = useProjectModal();
 

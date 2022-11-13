@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Button, Input, Drawer, Form, Spin } from "antd";
-import { useProjectModal } from "./util";
+import { useProjectModal, useProjectsQueryKey } from "./util";
 import { UserSelect } from "../../components/user-select";
 import { useAddProject, useEditProject } from "../../utils/use-projects";
 import { useForm } from "antd/es/form/Form";
@@ -11,9 +11,15 @@ export const ProjectModal = () => {
   // prettier-ignore
   const {projectModalOpen, close, editingProject, isLoading} = useProjectModal();
 
+  const queryKey = useProjectsQueryKey();
+
   const useMutateProject = editingProject ? useEditProject : useAddProject;
 
-  const { mutateAsync, error, isLoading: mutateLoading } = useMutateProject();
+  const {
+    mutateAsync,
+    error,
+    isLoading: mutateLoading,
+  } = useMutateProject(queryKey);
 
   const [form] = useForm();
 

@@ -1,7 +1,8 @@
 import { useHttp } from "./http";
 import { Project } from "../screens/project-list/list";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { QueryKey, useMutation, useQuery, useQueryClient } from "react-query";
 import { useProjectSearchParams } from "../screens/project-list/util";
+import { useAddConfig, useEditConfig } from "./use-optimistic-config";
 
 export const useProjects = (params?: Partial<Project>) => {
   const client = useHttp();
@@ -11,12 +12,8 @@ export const useProjects = (params?: Partial<Project>) => {
   );
 };
 
-export const useEditProject = () => {
+export const useEditProject = (queryKey: QueryKey) => {
   const client = useHttp();
-  const queryClient = useQueryClient();
-
-  const [searchParams] = useProjectSearchParams();
-  const queryKey = ["projects", searchParams];
 
   return useMutation(
     (params: Partial<Project>) =>
@@ -24,33 +21,12 @@ export const useEditProject = () => {
         method: "PATCH",
         data: params,
       }),
-    {
-      onSuccess: () => queryClient.invalidateQueries(queryKey),
-
-      async onMutate(target) {
-        // optimistic update
-        const prevProjects = queryClient.getQueryData(queryKey);
-
-        queryClient.setQueryData(queryKey, (old?: Project[]) => {
-          return (
-            old?.map((proj) =>
-              proj.id === target.id ? { ...proj, pin: true } : proj
-            ) || []
-          );
-        });
-
-        return { prevProjects }; // rollback onError
-      },
-      onError(error, newItem, context) {
-        queryClient.setQueryData(queryKey, context?.prevProjects);
-      },
-    }
+    useEditConfig(queryKey)
   );
 };
 
-export const useAddProject = () => {
+export const useAddProject = (queryKey: QueryKey) => {
   const client = useHttp();
-  const queryClient = useQueryClient();
 
   return useMutation(
     (params: Partial<Project>) =>
@@ -58,9 +34,7 @@ export const useAddProject = () => {
         method: "POST",
         data: params,
       }),
-    {
-      onSuccess: () => queryClient.invalidateQueries("projects"),
-    }
+    useAddConfig(queryKey)
   );
 };
 
