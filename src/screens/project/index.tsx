@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router";
+import { Routes, Route, Navigate } from "react-router";
 import { Link } from "react-router-dom";
 
 import { BoardScreen } from "../board";
@@ -14,6 +14,12 @@ export const ProjectScreen = () => {
       <Routes>
         <Route path={"/board"} element={<BoardScreen />} />
         <Route path={"/epic"} element={<EpicScreen />} />
+        <Route
+          index
+          element={
+            <Navigate to={window.location.pathname + "/board"} replace={true} />
+          }
+        />
       </Routes>
     </div>
   );
