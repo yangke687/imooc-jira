@@ -1,4 +1,4 @@
-import { User } from "screens/project-list/search-panel";
+import { User } from "./types/user";
 
 const key = "__auth_provider_token__";
 
