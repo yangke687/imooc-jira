@@ -8,15 +8,7 @@ import { Pin } from "../../components/Pin";
 import { useDeleteProject, useEditProject } from "../../utils/use-projects";
 import { ButtonNoPadding } from "../../components/lib";
 import { useProjectModal, useProjectsQueryKey } from "./util";
-
-export interface Project {
-  id: number;
-  name: string;
-  personId: number;
-  pin: boolean;
-  organization: string;
-  created: number;
-}
+import { Project } from "../../types/project";
 
 interface ListProps extends TableProps<Project> {
   users: User[];
