@@ -36,10 +36,15 @@ export const ProjectModal = () => {
 
   const title = editingProject ? "编辑项目" : "新建项目";
 
+  const onClose = () => {
+    form.resetFields();
+    close();
+  };
+
   return (
     <Drawer
       forceRender
-      onClose={close}
+      onClose={onClose}
       visible={projectModalOpen}
       width={"100%"}
     >
@@ -84,7 +89,7 @@ export const ProjectModal = () => {
                 >
                   提交
                 </Button>
-                <Button onClick={close}>关闭</Button>
+                <Button onClick={onClose}>关闭</Button>
               </Form.Item>
             </Form>
           </>
