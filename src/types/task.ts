@@ -4,7 +4,7 @@ export interface Task {
   processorId: number;
   projectId: number;
   epicId: number; // task group id
-  boardId: number;
+  kanbanId: number;
   type: string; // bug or task
   note: string;
 }
