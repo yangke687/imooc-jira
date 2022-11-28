@@ -22,7 +22,7 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
 };
 
 export const BoardColumn = ({ board }: { board: Board }) => {
-  const { data: allTasks } = useTasks(useTasksSearchParams());
+  const { data: allTasks } = useTasks(useTasksSearchParams()[0]);
 
   const tasks = allTasks?.filter((item) => item.kanbanId === board.id);
 
