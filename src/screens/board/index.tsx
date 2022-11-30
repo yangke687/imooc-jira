@@ -12,6 +12,7 @@ import { SearchPanel } from "./search-panel";
 import { ScreenContainer } from "../../components/lib";
 import { useTasks } from "../../utils/task";
 import { Spin } from "antd";
+import { CreateBoard } from "./create-board";
 
 export const BoardScreen = () => {
   useDocumentTitle("看板列表");
@@ -36,6 +37,7 @@ export const BoardScreen = () => {
           {boards.map((item) => (
             <BoardColumn board={item} key={item.id} />
           ))}
+          <CreateBoard />
         </ColumnsContainer>
       )}
     </ScreenContainer>

@@ -14,7 +14,7 @@ export const useProjectIdInUrl = () => {
 export const useProjectInUrl = () => useProject(useProjectIdInUrl());
 
 export const useBoardSearchParams = () => ({ projectId: useProjectIdInUrl() });
-export const useBoardsQueryKey = () => ["kanbans", useBoardSearchParams()];
+export const useBoardsQueryKey = () => ["boards", useBoardSearchParams()];
 
 export const useTasksSearchParams = () => {
   const [param, setParam] = useUrlQueryParam([
