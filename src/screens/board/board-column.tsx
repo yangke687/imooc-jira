@@ -8,6 +8,7 @@ import taskIcon from "../../assets/task.svg";
 import bugIcon from "../../assets/bug.svg";
 import styled from "@emotion/styled";
 import { Card } from "antd";
+import { CreateTask } from "./create-task";
 
 const TaskTypeIcon = ({ id }: { id: number }) => {
   const { data: taskTypes } = useTaskTypes();
@@ -36,6 +37,7 @@ export const BoardColumn = ({ board }: { board: Board }) => {
             <TaskTypeIcon id={item.typeId} />
           </Card>
         ))}
+        <CreateTask boardId={board.id} />
       </TasksContainer>
     </Container>
   );
