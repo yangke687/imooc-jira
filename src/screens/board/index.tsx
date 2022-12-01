@@ -13,6 +13,7 @@ import { ScreenContainer } from "../../components/lib";
 import { useTasks } from "../../utils/task";
 import { Spin } from "antd";
 import { CreateBoard } from "./create-board";
+import { TaskModal } from "./task-modal";
 
 export const BoardScreen = () => {
   useDocumentTitle("看板列表");
@@ -40,6 +41,7 @@ export const BoardScreen = () => {
           <CreateBoard />
         </ColumnsContainer>
       )}
+      <TaskModal />
     </ScreenContainer>
   );
 };

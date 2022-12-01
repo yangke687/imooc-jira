@@ -1,7 +1,7 @@
 import React from "react";
 import { Board } from "../../types/board";
 import { useTasks } from "../../utils/task";
-import { useTasksSearchParams } from "./util";
+import { useTasksModal, useTasksSearchParams } from "./util";
 import { useTaskTypes } from "../../utils/task-type";
 
 import taskIcon from "../../assets/task.svg";
@@ -27,12 +27,18 @@ export const BoardColumn = ({ board }: { board: Board }) => {
 
   const tasks = allTasks?.filter((item) => item.kanbanId === board.id);
 
+  const { startEdit } = useTasksModal();
+
   return (
     <Container>
       <TasksContainer>
         <h3>{board.name}</h3>
         {tasks?.map((item) => (
-          <Card key={item.id} style={{ marginBottom: "0.5rem" }}>
+          <Card
+            key={item.id}
+            style={{ marginBottom: "0.5rem", cursor: "pointer" }}
+            onClick={() => startEdit(item.id)}
+          >
             <div>{item.name}</div>
             <TaskTypeIcon id={item.typeId} />
           </Card>

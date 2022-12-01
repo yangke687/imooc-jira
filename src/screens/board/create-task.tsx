@@ -27,7 +27,7 @@ export const CreateTask = ({ boardId }: { boardId: number }) => {
   }, [inputMode]);
 
   if (!inputMode) {
-    return <div onClick={toggle}>创建任务</div>;
+    return <div onClick={toggle}>+创建任务</div>;
   }
 
   return (
