@@ -45,26 +45,28 @@ const TaskCard = ({ task }: { task: Task }) => {
   );
 };
 
-export const BoardColumn = ({ board }: { board: Board }) => {
-  const { data: allTasks } = useTasks(useTasksSearchParams()[0]);
+export const BoardColumn = React.forwardRef<HTMLDivElement, { board: Board }>(
+  ({ board, ...dragProps }, ref) => {
+    const { data: allTasks } = useTasks(useTasksSearchParams()[0]);
 
-  const tasks = allTasks?.filter((item) => item.kanbanId === board.id);
+    const tasks = allTasks?.filter((item) => item.kanbanId === board.id);
 
-  return (
-    <Container>
-      <TasksContainer>
-        <Row between>
-          <h3>{board.name}</h3>
-          <More kanban={board} />
-        </Row>
-        {tasks?.map((item) => (
-          <TaskCard task={item} />
-        ))}
-        <CreateTask boardId={board.id} />
-      </TasksContainer>
-    </Container>
-  );
-};
+    return (
+      <Container ref={ref} {...dragProps}>
+        <TasksContainer>
+          <Row between>
+            <h3>{board.name}</h3>
+            <More kanban={board} key={board.id} />
+          </Row>
+          {tasks?.map((item) => (
+            <TaskCard task={item} key={item.id} />
+          ))}
+          <CreateTask boardId={board.id} />
+        </TasksContainer>
+      </Container>
+    );
+  }
+);
 
 const More = ({ kanban }: { kanban: Board }) => {
   const { mutateAsync } = useDeleteBoard(useBoardsQueryKey());
