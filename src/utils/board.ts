@@ -1,7 +1,7 @@
 import { useHttp } from "./http";
 import { QueryKey, useMutation, useQuery } from "react-query";
 import { Board } from "../types/board";
-import { useAddConfig } from "./use-optimistic-config";
+import { useAddConfig, useDeleteConfig } from "./use-optimistic-config";
 
 export const useBoards = (params?: Partial<Board>) => {
   const client = useHttp();
@@ -21,5 +21,17 @@ export const useAddBoard = (queryKey: QueryKey) => {
         method: "POST",
       }),
     useAddConfig(queryKey)
+  );
+};
+
+export const useDeleteBoard = (queryKey: QueryKey) => {
+  const client = useHttp();
+
+  return useMutation(
+    ({ id }: { id: number }) =>
+      client(`kanbans/${id}`, {
+        method: "DELETE",
+      }),
+    useDeleteConfig(queryKey)
   );
 };
