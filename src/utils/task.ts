@@ -53,7 +53,7 @@ export const useDeleteTask = (queryKey: QueryKey) => {
   const client = useHttp();
 
   return useMutation(
-    ({ id }: { id: number }) =>
+    ({ id }: { id: number | string }) =>
       client(`tasks/${id}`, {
         method: "DELETE",
       }),
