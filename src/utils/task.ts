@@ -5,6 +5,7 @@ import {
   useAddConfig,
   useDeleteConfig,
   useEditConfig,
+  useReorderConfig,
 } from "./use-optimistic-config";
 import { SortProps } from "./board";
 
@@ -62,13 +63,15 @@ export const useDeleteTask = (queryKey: QueryKey) => {
   );
 };
 
-export const useReorderTask = () => {
+export const useReorderTask = (queryKey: QueryKey) => {
   const client = useHttp();
 
-  return useMutation((params: SortProps) =>
-    client("tasks/reorder", {
-      data: params,
-      method: "POST",
-    })
+  return useMutation(
+    (params: SortProps) =>
+      client("tasks/reorder", {
+        data: params,
+        method: "POST",
+      }),
+    useReorderConfig(queryKey)
   );
 };

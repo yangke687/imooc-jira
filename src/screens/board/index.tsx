@@ -3,7 +3,9 @@ import { useDocumentTitle } from "../../utils";
 import { useBoards, useReorderBoard } from "../../utils/board";
 import {
   useBoardSearchParams,
+  useBoardsQueryKey,
   useProjectInUrl,
+  useTasksQueryKey,
   useTasksSearchParams,
 } from "./util";
 import { BoardColumn } from "./board-column";
@@ -67,11 +69,11 @@ export const BoardScreen = () => {
 export const useDropEnd = () => {
   const { data: kanbans } = useBoards(useBoardSearchParams());
 
-  const { mutate: reorderKanban } = useReorderBoard();
+  const { mutate: reorderKanban } = useReorderBoard(useBoardsQueryKey());
 
   const { data: allTasks = [] } = useTasks(useTasksSearchParams()[0]);
 
-  const { mutate: reorderTask } = useReorderTask();
+  const { mutate: reorderTask } = useReorderTask(useTasksQueryKey());
 
   return ({ source, destination, type }: DropResult) => {
     if (!source || !destination) {
@@ -99,15 +101,15 @@ export const useDropEnd = () => {
       const fromKanbanId = +source.droppableId.split("-")[1];
       const toKanbanId = +destination.droppableId.split("-")[1];
 
-      if (fromKanbanId !== toKanbanId) {
+      if (fromKanbanId === toKanbanId) {
         return;
       }
 
       const fromTask = allTasks.filter(
-        (item) => item.kanbanId === +fromKanbanId
+        (item) => item.kanbanId === fromKanbanId
       )[source.index];
 
-      const toTask = allTasks.filter((item) => item.kanbanId === +toKanbanId)[
+      const toTask = allTasks.filter((item) => item.kanbanId === toKanbanId)[
         destination.index
       ];
 
@@ -115,7 +117,7 @@ export const useDropEnd = () => {
 
       const toId = toTask.id;
 
-      if (!fromId || !toId || fromId === toId) {
+      if (!fromId || !toId) {
         return;
       }
 

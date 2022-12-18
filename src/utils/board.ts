@@ -1,7 +1,11 @@
 import { useHttp } from "./http";
 import { QueryKey, useMutation, useQuery } from "react-query";
 import { Board } from "../types/board";
-import { useAddConfig, useDeleteConfig } from "./use-optimistic-config";
+import {
+  useAddConfig,
+  useDeleteConfig,
+  useReorderConfig,
+} from "./use-optimistic-config";
 
 export const useBoards = (params?: Partial<Board>) => {
   const client = useHttp();
@@ -45,13 +49,15 @@ export interface SortProps {
   toKanbanId?: number;
 }
 
-export const useReorderBoard = () => {
+export const useReorderBoard = (queryKey: QueryKey) => {
   const client = useHttp();
 
-  return useMutation((params: SortProps) =>
-    client("kanbans/reorder", {
-      data: params,
-      method: "POST",
-    })
+  return useMutation(
+    (params: SortProps) =>
+      client("kanbans/reorder", {
+        data: params,
+        method: "POST",
+      }),
+    useReorderConfig(queryKey)
   );
 };
