@@ -6,6 +6,7 @@ import {
   useDeleteConfig,
   useEditConfig,
 } from "./use-optimistic-config";
+import { SortProps } from "./board";
 
 export const useTasks = (params?: Partial<Task>) => {
   const client = useHttp();
@@ -58,5 +59,16 @@ export const useDeleteTask = (queryKey: QueryKey) => {
         method: "DELETE",
       }),
     useDeleteConfig(queryKey)
+  );
+};
+
+export const useReorderTask = () => {
+  const client = useHttp();
+
+  return useMutation((params: SortProps) =>
+    client("tasks/reorder", {
+      data: params,
+      method: "POST",
+    })
   );
 };

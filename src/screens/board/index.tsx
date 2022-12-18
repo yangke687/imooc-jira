@@ -10,7 +10,7 @@ import { BoardColumn } from "./board-column";
 import styled from "@emotion/styled";
 import { SearchPanel } from "./search-panel";
 import { ScreenContainer } from "../../components/lib";
-import { useTasks } from "../../utils/task";
+import { useReorderTask, useTasks } from "../../utils/task";
 import { Spin } from "antd";
 import { CreateBoard } from "./create-board";
 import { TaskModal } from "./task-modal";
@@ -67,7 +67,11 @@ export const BoardScreen = () => {
 export const useDropEnd = () => {
   const { data: kanbans } = useBoards(useBoardSearchParams());
 
-  const { mutate: recordBoard } = useReorderBoard();
+  const { mutate: reorderKanban } = useReorderBoard();
+
+  const { data: allTasks = [] } = useTasks(useTasksSearchParams()[0]);
+
+  const { mutate: reorderTask } = useReorderTask();
 
   return ({ source, destination, type }: DropResult) => {
     if (!source || !destination) {
@@ -84,7 +88,7 @@ export const useDropEnd = () => {
 
       const type = source.index < destination.index ? "after" : "before";
 
-      recordBoard({
+      reorderKanban({
         fromId,
         referenceId: toId,
         type,
@@ -92,6 +96,38 @@ export const useDropEnd = () => {
     }
 
     if (type === "ROW") {
+      const fromKanbanId = +source.droppableId.split("-")[1];
+      const toKanbanId = +destination.droppableId.split("-")[1];
+
+      if (fromKanbanId !== toKanbanId) {
+        return;
+      }
+
+      const fromTask = allTasks.filter(
+        (item) => item.kanbanId === +fromKanbanId
+      )[source.index];
+
+      const toTask = allTasks.filter((item) => item.kanbanId === +toKanbanId)[
+        destination.index
+      ];
+
+      const fromId = fromTask.id;
+
+      const toId = toTask.id;
+
+      if (!fromId || !toId || fromId === toId) {
+        return;
+      }
+
+      const type = source.index < destination.index ? "after" : "before";
+
+      reorderTask({
+        fromId,
+        referenceId: toId,
+        type,
+        toKanbanId,
+        fromKanbanId,
+      });
     }
   };
 };
