@@ -1,6 +1,6 @@
 import React from "react";
 import { useDocumentTitle } from "../../utils";
-import { useBoards } from "../../utils/board";
+import { useBoards, useReorderBoard } from "../../utils/board";
 import {
   useBoardSearchParams,
   useProjectInUrl,
@@ -14,7 +14,7 @@ import { useTasks } from "../../utils/task";
 import { Spin } from "antd";
 import { CreateBoard } from "./create-board";
 import { TaskModal } from "./task-modal";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Drag, Drop, DropChild } from "../../components/drag-and-drop";
 
 export const BoardScreen = () => {
@@ -30,7 +30,7 @@ export const BoardScreen = () => {
   const isLoading = tasksIsLoading || boardIsLoading;
 
   return (
-    <DragDropContext onDragEnd={() => console.log("saving data...")}>
+    <DragDropContext onDragEnd={useDropEnd()}>
       <ScreenContainer>
         <h1>{project?.name}看板</h1>
         <SearchPanel />
@@ -62,6 +62,38 @@ export const BoardScreen = () => {
       </ScreenContainer>
     </DragDropContext>
   );
+};
+
+export const useDropEnd = () => {
+  const { data: kanbans } = useBoards(useBoardSearchParams());
+
+  const { mutate: recordBoard } = useReorderBoard();
+
+  return ({ source, destination, type }: DropResult) => {
+    if (!source || !destination) {
+      return;
+    }
+
+    if (type === "COLUMN") {
+      const fromId = kanbans?.[source.index].id;
+      const toId = kanbans?.[destination.index].id;
+
+      if (!fromId || !toId || fromId === toId) {
+        return;
+      }
+
+      const type = source.index < destination.index ? "after" : "before";
+
+      recordBoard({
+        fromId,
+        referenceId: toId,
+        type,
+      });
+    }
+
+    if (type === "ROW") {
+    }
+  };
 };
 
 const ColumnsContainer = styled("div")`

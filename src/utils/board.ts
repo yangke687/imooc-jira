@@ -35,3 +35,21 @@ export const useDeleteBoard = (queryKey: QueryKey) => {
     useDeleteConfig(queryKey)
   );
 };
+
+export interface SortProps {
+  // put 'fromId' 'before' or 'after' 'refId'
+  fromId: number;
+  referenceId: number;
+  type: "before" | "after";
+}
+
+export const useReorderBoard = () => {
+  const client = useHttp();
+
+  return useMutation((params: SortProps) =>
+    client("kanbans/reorder", {
+      data: params,
+      method: "POST",
+    })
+  );
+};
