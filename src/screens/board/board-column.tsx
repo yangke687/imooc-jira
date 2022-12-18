@@ -13,6 +13,7 @@ import { Task } from "../../types/task";
 import { Mark } from "../../components/mark";
 import { useDeleteBoard } from "../../utils/board";
 import { Row } from "../../components/lib";
+import { Drag, Drop, DropChild } from "../../components/drag-and-drop";
 
 const TaskTypeIcon = ({ id }: { id: number }) => {
   const { data: taskTypes } = useTaskTypes();
@@ -26,24 +27,28 @@ const TaskTypeIcon = ({ id }: { id: number }) => {
   return <img src={name === "bug" ? bugIcon : taskIcon} alt={"task-type"} />;
 };
 
-const TaskCard = ({ task }: { task: Task }) => {
-  const { startEdit } = useTasksModal();
-  const [searchParams] = useTasksSearchParams();
-  const { name: keyword } = searchParams;
+const TaskCard = React.forwardRef<HTMLDivElement, { task: Task }>(
+  ({ task, ...dragProps }, ref) => {
+    const { startEdit } = useTasksModal();
+    const [searchParams] = useTasksSearchParams();
+    const { name: keyword } = searchParams;
 
-  return (
-    <Card
-      key={task.id}
-      style={{ marginBottom: "0.5rem", cursor: "pointer" }}
-      onClick={() => startEdit(task.id)}
-    >
-      <p>
-        <Mark name={task.name} keyword={keyword} />
-      </p>
-      <TaskTypeIcon id={task.typeId} />
-    </Card>
-  );
-};
+    return (
+      <div ref={ref} {...dragProps}>
+        <Card
+          key={task.id}
+          style={{ marginBottom: "0.5rem", cursor: "pointer" }}
+          onClick={() => startEdit(task.id)}
+        >
+          <p>
+            <Mark name={task.name} keyword={keyword} />
+          </p>
+          <TaskTypeIcon id={task.typeId} />
+        </Card>
+      </div>
+    );
+  }
+);
 
 export const BoardColumn = React.forwardRef<HTMLDivElement, { board: Board }>(
   ({ board, ...dragProps }, ref) => {
@@ -58,9 +63,19 @@ export const BoardColumn = React.forwardRef<HTMLDivElement, { board: Board }>(
             <h3>{board.name}</h3>
             <More kanban={board} key={board.id} />
           </Row>
-          {tasks?.map((item) => (
-            <TaskCard task={item} key={item.id} />
-          ))}
+          <Drop
+            type={"ROW"}
+            direction={"vertical"}
+            droppableId={`task-${board.id}`}
+          >
+            <DropChild>
+              {tasks?.map((item, idx) => (
+                <Drag draggableId={`task-${item.id}`} index={idx} key={item.id}>
+                  <TaskCard task={item} key={item.id} />
+                </Drag>
+              ))}
+            </DropChild>
+          </Drop>
           <CreateTask boardId={board.id} />
         </TasksContainer>
       </Container>

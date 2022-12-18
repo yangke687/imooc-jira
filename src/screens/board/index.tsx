@@ -37,20 +37,26 @@ export const BoardScreen = () => {
         {isLoading ? (
           <Spin size={"large"} />
         ) : (
-          <Drop type={"COLUMN"} direction={"horizontal"} droppableId={"kanban"}>
-            <ColumnsContainer>
-              {boards.map((item, idx) => (
-                <Drag
-                  key={item.id}
-                  draggableId={`kanban-column-${item.id}`}
-                  index={idx}
-                >
-                  <BoardColumn board={item} key={item.id} />
-                </Drag>
-              ))}
-              <CreateBoard />
-            </ColumnsContainer>
-          </Drop>
+          <ColumnsContainer>
+            <Drop
+              type={"COLUMN"}
+              direction={"horizontal"}
+              droppableId={"kanban"}
+            >
+              <DropChild style={{ display: "flex" }}>
+                {boards.map((item, idx) => (
+                  <Drag
+                    key={item.id}
+                    draggableId={`kanban-column-${item.id}`}
+                    index={idx}
+                  >
+                    <BoardColumn board={item} key={item.id} />
+                  </Drag>
+                ))}
+              </DropChild>
+            </Drop>
+            <CreateBoard />
+          </ColumnsContainer>
         )}
         <TaskModal />
       </ScreenContainer>
@@ -58,7 +64,7 @@ export const BoardScreen = () => {
   );
 };
 
-const ColumnsContainer = styled(DropChild)`
+const ColumnsContainer = styled("div")`
   display: flex;
   overflow-x: scroll;
   margin-right: 2rem;
