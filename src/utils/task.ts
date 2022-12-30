@@ -5,7 +5,7 @@ import {
   useAddConfig,
   useDeleteConfig,
   useEditConfig,
-  useReorderConfig,
+  useReorderTaskConfig,
 } from "./use-optimistic-config";
 import { SortProps } from "./board";
 
@@ -72,6 +72,6 @@ export const useReorderTask = (queryKey: QueryKey) => {
         data: params,
         method: "POST",
       }),
-    useReorderConfig(queryKey)
+    useReorderTaskConfig(queryKey)
   );
 };

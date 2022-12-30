@@ -4,7 +4,7 @@ import { Board } from "../types/board";
 import {
   useAddConfig,
   useDeleteConfig,
-  useReorderConfig,
+  useReorderKanbanConfig,
 } from "./use-optimistic-config";
 
 export const useBoards = (params?: Partial<Board>) => {
@@ -58,6 +58,6 @@ export const useReorderBoard = (queryKey: QueryKey) => {
         data: params,
         method: "POST",
       }),
-    useReorderConfig(queryKey)
+    useReorderKanbanConfig(queryKey)
   );
 };

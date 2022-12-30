@@ -101,9 +101,9 @@ export const useDropEnd = () => {
       const fromKanbanId = +source.droppableId.split("-")[1];
       const toKanbanId = +destination.droppableId.split("-")[1];
 
-      if (fromKanbanId === toKanbanId) {
-        return;
-      }
+      // if (fromKanbanId === toKanbanId) {
+      //   return;
+      // }
 
       const fromTask = allTasks.filter(
         (item) => item.kanbanId === fromKanbanId
@@ -113,19 +113,11 @@ export const useDropEnd = () => {
         destination.index
       ];
 
-      const fromId = fromTask.id;
-
-      const toId = toTask.id;
-
-      if (!fromId || !toId) {
-        return;
-      }
-
       const type = source.index < destination.index ? "after" : "before";
 
       reorderTask({
-        fromId,
-        referenceId: toId,
+        fromId: fromTask?.id,
+        referenceId: toTask?.id,
         type,
         toKanbanId,
         fromKanbanId,

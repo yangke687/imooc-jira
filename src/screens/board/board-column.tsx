@@ -68,7 +68,7 @@ export const BoardColumn = React.forwardRef<HTMLDivElement, { board: Board }>(
             direction={"vertical"}
             droppableId={`kanban-${board.id}`}
           >
-            <DropChild>
+            <DropChild style={{ minHeight: 5 }}>
               {tasks?.map((item, idx) => (
                 <Drag draggableId={`task-${item.id}`} index={idx} key={item.id}>
                   <TaskCard task={item} key={item.id} />
