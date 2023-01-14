@@ -12,6 +12,7 @@ import { ProjectScreen } from "./screens/project";
 import { ProjectModal } from "./screens/project-list/project-modal";
 import { ProjectPopover } from "./components/project-popover";
 import { Counter } from "./screens/counter-sample";
+import { UserPopover } from "./components/user-popover";
 
 export const AuthApp = () => {
   useDocumentTitle("项目列表", false);
@@ -45,7 +46,7 @@ const PageHeader = () => {
           <Logo width="18rem" color="rgb(38, 132, 255)" />
         </ButtonNoPadding>
         <ProjectPopover />
-        <span>用户</span>
+        <UserPopover />
       </HeaderLeft>
       <HeaderRight>
         <User />
