@@ -5,7 +5,6 @@ import styled from "@emotion/styled";
 import { useAddEpic } from "../../utils/epic";
 import { useEpicsQueryKey } from "./util";
 import { ErrorBox } from "../../components/lib";
-import { useForm } from "antd/es/form/Form";
 import { useProjectIdInUrl } from "../board/util";
 
 export const CreateEpic = (
@@ -13,7 +12,7 @@ export const CreateEpic = (
 ) => {
   const { mutate: addEpic, isLoading, error } = useAddEpic(useEpicsQueryKey());
 
-  const [form] = useForm();
+  const [form] = Form.useForm();
 
   const projectId = useProjectIdInUrl();
 
