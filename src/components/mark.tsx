@@ -11,12 +11,12 @@ export const Mark = ({ name, keyword }: { name: string; keyword: string }) => {
     <>
       {arr.map((str, idx) => {
         return (
-          <>
+          <div key={idx}>
             <span>{str}</span>
             {idx >= arr.length - 1 ? null : (
               <span style={{ color: "#257AFD" }}>{keyword}</span>
             )}
-          </>
+          </div>
         );
       })}
     </>
